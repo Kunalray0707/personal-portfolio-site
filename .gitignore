@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env.local
+.env.*.local
+.DS_Store
+dist/
+.vscode/
+coverage/
+/public/uploads/
+
+# Logs & build artifacts
+*.log
+tsconfig.tsbuildinfo

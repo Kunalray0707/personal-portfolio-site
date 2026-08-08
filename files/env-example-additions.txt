@@ -1,0 +1,27 @@
+Add the following lines to your .env.local or .env.example to configure OpenAI (optional):
+
+# OpenAI (optional - if not provided the app will use local mock responses)
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
+
+Recommendation: copy these into your .env.local when you have an OpenAI key to enable real AI responses.
+
+--------------------------------------------
+Phase 7 — Payments (Razorpay) environment variables
+--------------------------------------------
+# Razorpay (optional - if not provided the app runs in local mock/sandbox mode,
+# letting you test the payment flow end-to-end without live credentials)
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+NEXT_PUBLIC_RAZORPAY_KEY_ID=
+
+# Recommendation: obtain credentials from https://dashboard.razorpay.com
+# For local webhook testing use a tunnel (e.g. ngrok) pointing to
+# https://<your-host>/api/payments/webhook
+#
+# Webhook events to enable in the dashboard:
+#   - payment.captured
+#   - payment.failed
+#   - subscription.charged
+#   - refund.processed
