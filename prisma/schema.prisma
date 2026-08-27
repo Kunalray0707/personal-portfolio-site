@@ -26,9 +26,12 @@ model User {
   accounts      Account[]
   portfolios    Portfolio[]
   subscriptions Subscription[]
-  payments      Payment[]
-  invoices      Invoice[]
-  customDomains CustomDomain[]
+  payments       Payment[]
+  invoices       Invoice[]
+  customDomains  CustomDomain[]
+  supportTickets SupportTicket[]
+  ticketMessages TicketMessage[]
+  blogPosts      BlogPost[]
 }
 
 model Account {
@@ -93,11 +96,17 @@ model Portfolio {
   published     Boolean            @default(false)
   content       Json
   views         Int                @default(0)
+  metaTitle        String?
+  metaDescription  String?
+  ogImageUrl       String?
+  customHeadScript String?
+  customBodyScript String?
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
   user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   versions      PortfolioVersion[]
   customDomains CustomDomain[]
+  visits        PortfolioVisit[]
 }
 
 model PortfolioVersion {
@@ -107,6 +116,23 @@ model PortfolioVersion {
   note        String?
   createdAt   DateTime  @default(now())
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+// ---- Phase 10: Analytics ----
+
+model PortfolioVisit {
+  id          String    @id @default(cuid())
+  portfolioId String
+  visitorHash String
+  userAgent   String?
+  country     String?
+  device      String?
+  referrer    String?
+  createdAt   DateTime  @default(now())
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+  @@index([portfolioId, createdAt])
 }
 
 // ---- Phase 7: Payments ----
@@ -221,4 +247,91 @@ enum PaymentStatus {
 enum Role {
   ADMIN
   USER
+}
+
+// ---- Phase 9: Admin Panel ----
+
+model Coupon {
+  id              String    @id @default(cuid())
+  code            String    @unique
+  discountPercent Int
+  maxUses         Int?
+  usedCount       Int       @default(0)
+  expiresAt       DateTime?
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model SupportTicket {
+  id        String          @id @default(cuid())
+  userId    String
+  subject   String
+  status    TicketStatus    @default(OPEN)
+  priority  TicketPriority  @default(NORMAL)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  TicketMessage[]
+}
+
+model TicketMessage {
+  id        String        @id @default(cuid())
+  ticketId  String
+  userId    String
+  message   String
+  createdAt DateTime      @default(now())
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Announcement {
+  id        String           @id @default(cuid())
+  title     String
+  content   String
+  type      AnnouncementType @default(INFO)
+  active    Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String?
+  published   Boolean  @default(false)
+  authorId    String
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum AnnouncementType {
+  INFO
+  WARNING
+  SUCCESS
 }

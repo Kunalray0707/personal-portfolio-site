@@ -25,3 +25,27 @@ NEXT_PUBLIC_RAZORPAY_KEY_ID=
 #   - payment.failed
 #   - subscription.charged
 #   - refund.processed
+
+--------------------------------------------
+Phase 0 — Google OAuth environment variables
+--------------------------------------------
+# Google OAuth (optional - if not provided, the "Continue with Google" buttons
+# gracefully show an error/remain unavailable)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Recommendation: create credentials at https://console.cloud.google.com/apis/credentials
+# Authorized redirect URI must include:
+#   <NEXT_PUBLIC_BASE_URL>/api/auth/google/callback
+
+--------------------------------------------
+Phase 0 — Cloudinary environment variables
+--------------------------------------------
+# Cloudinary (optional - if not provided, uploads fall back to local data URLs
+# so the flow can be tested without credentials)
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Recommendation: obtain credentials from https://cloudinary.com/console
+</content>

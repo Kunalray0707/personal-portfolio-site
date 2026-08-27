@@ -4,7 +4,7 @@
 
 This repository contains the Phase 8 implementation of Portfolio AI Pro, adding an Export & Deployment hub with standalone HTML/PDF/ZIP/JSON downloads, Vercel & GitHub deployment scaffolding, and custom domain management. Phase 7 (Razorpay payments) is also included.
 
-Tech stack (Phase 1): Next 15 (App Router), React 19, TypeScript, Tailwind CSS, shadcn/ui (setup instruction), Framer Motion, GSAP.
+Tech stack (confirmed by audit): Next.js 13.4.13 (App Router), React 18.2.0, TypeScript, Tailwind CSS, Framer Motion, GSAP, Prisma/PostgreSQL. shadcn/ui primitives (Button, Input, Card, Dialog, Toast) are included in `components/ui/`. Manual Google OAuth and Cloudinary uploads are wired with graceful mock fallbacks when env vars are absent.
 
 Quick start (after cloning):
 

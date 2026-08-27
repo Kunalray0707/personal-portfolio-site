@@ -1,26 +1,24 @@
-# Phase 8 — Export & Deployment Implementation TODO
+# Portfolio AI Pro — Phase 0 Stack Reconciliation TODO
+
+## Decisions (confirmed)
+- Accept Next.js 13.4.13 / React 18.2.0 (no upgrade)
+- Add shadcn/ui core primitives (Button, Input, Card, Dialog, Toast)
+- Keep hand-rolled auth + bolt on Google OAuth manually
+- Add Cloudinary for image & resume PDF uploads
 
 ## Steps
-- [x] 1. Update Prisma schema with `CustomDomain` model + relations on Portfolio/User
-- [x] 2. Run `prisma generate`
-- [x] 3. Install `archiver` + `@types/archiver`
-- [x] 4. Create `lib/export.ts` (standalone HTML, JSON, Vercel manifest, GitHub metadata)
-- [x] 5. Create `lib/domains.ts` (normalize, validate, token verify helpers)
-- [x] 6. Create export API routes:
-  - [x] `/api/export/html`
-  - [x] `/api/export/json`
-  - [x] `/api/export/pdf`
-  - [x] `/api/export/zip`
-  - [x] `/api/export/deploy`
-  - [x] `/api/export/github`
-- [x] 7. Create custom domain API routes:
-  - [x] `/api/domains/set`
-  - [x] `/api/domains/verify`
-  - [x] `/api/domains/list`
-  - [x] `/api/domains/delete`
-- [x] 8. Create `components/payments/ExportPanel.tsx`
-- [x] 9. Create `/dashboard/export` page
-- [x] 10. Add Export link to Sidebar
-- [x] 11. Create `tests/export.test.ts`
-- [ ] 12. Run typecheck, lint, test, build
-- [x] 13. Update README with Phase 8 docs
+- [x] 1. Install shadcn/ui deps (tailwind-merge, class-variance-authority, radix dialog/label, lucide)
+- [x] 2. Create `lib/utils.ts` (cn helper)
+- [x] 3. Create `components.json` (shadcn config)
+- [x] 4. Create shadcn/ui primitives: Button, Input, Card, Dialog, Toast
+- [x] 5. Create `lib/google.ts` (OAuth URL, token exchange, user info)
+- [x] 6. Create `lib/session.ts` (shared session creation helper)
+- [x] 7. Create Google OAuth API routes (`/api/auth/google`, `/api/auth/google/callback`)
+- [x] 8. Add "Continue with Google" button to login & register pages
+- [x] 9. Create `lib/cloudinary.ts` (upload helper + transform)
+- [x] 10. Create `/api/upload` route + `ImageUploader` component
+- [x] 11. Wire Cloudinary into portfolio builder (feature section images) & ProfileCard (profile photo)
+- [x] 12. Wire ToastProvider into root layout
+- [x] 13. Update README to reflect actual stack
+- [ ] 14. Run typecheck, lint, test, build
+</content>

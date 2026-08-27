@@ -21,7 +21,12 @@ const updateSchema = z.object({
   isPrivate: z.boolean().default(false),
   published: z.boolean().default(false),
   password: z.string().max(128).optional(),
-  sections: z.array(sectionSchema).min(1)
+  sections: z.array(sectionSchema).min(1),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  ogImageUrl: z.string().optional(),
+  customHeadScript: z.string().optional(),
+  customBodyScript: z.string().optional()
 });
 
 export const dynamic = 'force-dynamic';
@@ -43,6 +48,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       isPrivate: true,
       published: true,
       content: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogImageUrl: true,
+      customHeadScript: true,
+      customBodyScript: true,
       createdAt: true,
       updatedAt: true,
       versions: {
@@ -77,7 +87,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     heroSubtitle: data.heroSubtitle || '',
     isPrivate: data.isPrivate,
     published: data.published,
-    content: { sections: data.sections }
+    content: { sections: data.sections },
+    metaTitle: data.metaTitle,
+    metaDescription: data.metaDescription,
+    ogImageUrl: data.ogImageUrl,
+    customHeadScript: data.customHeadScript,
+    customBodyScript: data.customBodyScript
   };
 
   if (data.isPrivate) {
@@ -101,6 +116,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       isPrivate: true,
       published: true,
       content: true,
+      metaTitle: true,
+      metaDescription: true,
+      ogImageUrl: true,
+      customHeadScript: true,
+      customBodyScript: true,
       createdAt: true,
       updatedAt: true
     }

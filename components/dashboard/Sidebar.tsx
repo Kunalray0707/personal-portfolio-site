@@ -5,7 +5,7 @@ import { FaHome, FaChartLine, FaBell, FaRegChartBar, FaCog, FaTimes, FaCreditCar
 
 const links = [
   { label: 'Overview', href: '/dashboard', icon: FaHome },
-  { label: 'Analytics', href: '/dashboard', icon: FaChartLine },
+  { label: 'Analytics', href: '/dashboard/analytics', icon: FaChartLine },
   { label: 'Activity', href: '/dashboard', icon: FaRegChartBar },
   { label: 'Notifications', href: '/dashboard', icon: FaBell },
   { label: 'Billing', href: '/dashboard/billing', icon: FaCreditCard },

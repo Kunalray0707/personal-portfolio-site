@@ -7,6 +7,7 @@ import { FaPlus, FaSave, FaTrash, FaUnlock, FaLock, FaUndo, FaRedo, FaCopy, FaEx
 import { useRouter } from 'next/navigation';
 import PortfolioPreview from './PortfolioPreview';
 import AIPanel from '../../components/ai/AIPanel';
+import { ImageUploader } from '../../components/ui/ImageUploader';
 
 type SectionType = 'text' | 'feature' | 'contact';
 
@@ -29,6 +30,11 @@ type PortfolioDraft = {
   published: boolean;
   slug: string;
   sections: Section[];
+  metaTitle?: string;
+  metaDescription?: string;
+  ogImageUrl?: string;
+  customHeadScript?: string;
+  customBodyScript?: string;
 };
 
 type PortfolioVersion = {
@@ -92,14 +98,13 @@ function SortableSectionItem({ section, onChange, onRemove }: { section: Section
           className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
         />
 
-        {section.type === 'feature' && (
+{section.type === 'feature' && (
           <>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Image URL</label>
-            <input
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Image</label>
+            <ImageUploader
               value={section.imageUrl || ''}
-              onChange={(event) => onChange({ imageUrl: event.target.value })}
-              placeholder="https://example.com/image.png"
-              className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              onChange={(url) => onChange({ imageUrl: url })}
+              label="Upload section image"
             />
             <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-300">Feature bullets</label>
             <textarea
@@ -155,7 +160,12 @@ export default function PortfolioBuilder({ portfolioId }: PortfolioBuilderProps)
           password: '',
           published: portfolio.published,
           slug: portfolio.slug,
-          sections: portfolio.content?.sections ?? []
+          sections: portfolio.content?.sections ?? [],
+          metaTitle: portfolio.metaTitle || '',
+          metaDescription: portfolio.metaDescription || '',
+          ogImageUrl: portfolio.ogImageUrl || '',
+          customHeadScript: portfolio.customHeadScript || '',
+          customBodyScript: portfolio.customBodyScript || ''
         });
         setPortfolioSlug(portfolio.slug);
         setVersions(portfolio.versions || []);
@@ -271,7 +281,12 @@ export default function PortfolioBuilder({ portfolioId }: PortfolioBuilderProps)
           isPrivate: draft.isPrivate,
           published: draft.published,
           password: draft.password,
-          sections: draft.sections
+          sections: draft.sections,
+          metaTitle: draft.metaTitle,
+          metaDescription: draft.metaDescription,
+          ogImageUrl: draft.ogImageUrl,
+          customHeadScript: draft.customHeadScript,
+          customBodyScript: draft.customBodyScript
         })
       });
 
@@ -473,6 +488,46 @@ export default function PortfolioBuilder({ portfolioId }: PortfolioBuilderProps)
                   </div>
                   <div className="text-slate-500 dark:text-slate-400">Copy the public link and share it with your audience.</div>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/80">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Advanced settings</h2>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage SEO, Open Graph images, and custom scripts.</p>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">SEO Meta Title</label>
+                <input value={draft.metaTitle || ''} onChange={(event) => updateDraft({ metaTitle: event.target.value })} placeholder="Default is portfolio title" className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">SEO Meta Description</label>
+                <textarea value={draft.metaDescription || ''} onChange={(event) => updateDraft({ metaDescription: event.target.value })} placeholder="Default is portfolio description" rows={2} className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Open Graph Image (Social Sharing)</label>
+                <div className="mt-2">
+                  <ImageUploader value={draft.ogImageUrl || ''} onChange={(url) => updateDraft({ ogImageUrl: url })} label="Upload OG Image" />
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Custom Head Script</label>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Inject code into the &lt;head&gt; tag (e.g. Google Analytics).</p>
+                <textarea value={draft.customHeadScript || ''} onChange={(event) => updateDraft({ customHeadScript: event.target.value })} placeholder="<script>...</script>" rows={3} className="mt-2 w-full font-mono rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Custom Body Script</label>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Inject code at the end of the &lt;body&gt; tag.</p>
+                <textarea value={draft.customBodyScript || ''} onChange={(event) => updateDraft({ customBodyScript: event.target.value })} placeholder="<script>...</script>" rows={3} className="mt-2 w-full font-mono rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" />
               </div>
             </div>
           </section>
