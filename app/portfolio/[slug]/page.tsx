@@ -47,9 +47,7 @@ export default async function PublicPortfolioPage({ params }: { params: { slug: 
     heroSubtitle: portfolio.heroSubtitle ?? '',
     slug: portfolio.slug,
     isPrivate: portfolio.isPrivate,
-    content: portfolio.content as {
-      sections: Array<{ id: string; type: 'text' | 'feature' | 'contact'; title: string; body?: string; imageUrl?: string }>;
-    }
+    content: portfolio.content ? JSON.parse(portfolio.content) : { sections: [] }
   };
 
   return (

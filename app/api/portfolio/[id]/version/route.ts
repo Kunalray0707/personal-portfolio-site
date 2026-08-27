@@ -24,7 +24,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   const version = await prisma.portfolioVersion.create({
     data: {
       portfolioId: params.id,
-      snapshot: data.snapshot,
+      snapshot: JSON.stringify(data.snapshot),
       note: data.note || ''
     }
   });

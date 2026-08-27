@@ -15,7 +15,12 @@ export async function GET() {
       orderBy: { priceINR: 'asc' }
     });
 
-    return NextResponse.json({ plans });
+    const parsedPlans = plans.map(p => ({
+      ...p,
+      features: p.features ? JSON.parse(p.features) : []
+    }));
+
+    return NextResponse.json({ plans: parsedPlans });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to load plans';
     return NextResponse.json({ error: message }, { status: 500 });

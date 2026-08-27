@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Search, MoreVertical, Shield, Trash2, User as UserIcon } from 'lucide-react';
 import { useToast } from '../../../components/ui/toast';
+import { motion } from 'framer-motion';
 
 type User = {
   id: string;
@@ -78,7 +79,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Users</h2>
@@ -118,8 +119,14 @@ export default function AdminUsersPage() {
                   <td colSpan={5} className="px-6 py-8 text-center text-slate-500">No users found.</td>
                 </tr>
               ) : (
-                users.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-slate-950/30 transition">
+                users.map((user, idx) => (
+                  <motion.tr 
+                    key={user.id} 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="hover:bg-slate-50 dark:hover:bg-slate-950/30 transition"
+                  >
                     <td className="px-6 py-4 flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
                         <UserIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
@@ -167,13 +174,13 @@ export default function AdminUsersPage() {
                         </button>
                       </div>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))
               )}
             </tbody>
           </table>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

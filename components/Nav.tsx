@@ -12,15 +12,15 @@ export default function Nav() {
           <nav className="hidden sm:flex gap-4 ml-6 text-sm text-slate-600 dark:text-slate-300">
             <Link href="/templates">Templates</Link>
             <Link href="/dashboard/portfolios">Builder</Link>
-            <Link href="/auth/register">Pricing</Link>
-            <Link href="/auth/register">Docs</Link>
+            <Link href="/pricing">Pricing</Link>
+            <Link href="/docs">Docs</Link>
           </nav>
         </div>
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Link href="/auth/register" className="hidden sm:inline-block px-4 py-2 rounded-md bg-primary text-white">Sign up</Link>
-          <Link href="/auth/login" className="text-sm text-slate-600 dark:text-slate-300">Sign in</Link>
+          <Link href="/auth" className="hidden sm:inline-block px-4 py-2 rounded-md bg-primary text-white">Sign up</Link>
+          <Link href="/auth" className="text-sm text-slate-600 dark:text-slate-300">Sign in</Link>
         </div>
       </div>
     </header>

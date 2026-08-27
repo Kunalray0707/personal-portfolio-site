@@ -6,26 +6,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String?        @unique
-  emailVerified DateTime?
-  phone         String?        @unique
-  name          String?
-  passwordHash  String? // nullable for OAuth users
-  role          Role           @default(USER)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  sessions      Session[]
-  otps          OTP[]
+  id             String          @id @default(cuid())
+  email          String?         @unique
+  emailVerified  DateTime?
+  phone          String?         @unique
+  name           String?
+  passwordHash   String? // nullable for OAuth users
+  role           String          @default("USER")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  sessions       Session[]
+  otps           OTP[]
   // For OAuth provider accounts
-  accounts      Account[]
-  portfolios    Portfolio[]
-  subscriptions Subscription[]
+  accounts       Account[]
+  portfolios     Portfolio[]
+  subscriptions  Subscription[]
   payments       Payment[]
   invoices       Invoice[]
   customDomains  CustomDomain[]
@@ -84,35 +84,35 @@ model OTP {
 }
 
 model Portfolio {
-  id            String             @id @default(cuid())
-  userId        String
-  title         String
-  slug          String             @unique
-  description   String?
-  heroTitle     String
-  heroSubtitle  String?
-  isPrivate     Boolean            @default(false)
-  passwordHash  String?
-  published     Boolean            @default(false)
-  content       Json
-  views         Int                @default(0)
+  id               String             @id @default(cuid())
+  userId           String
+  title            String
+  slug             String             @unique
+  description      String?
+  heroTitle        String
+  heroSubtitle     String?
+  isPrivate        Boolean            @default(false)
+  passwordHash     String?
+  published        Boolean            @default(false)
+  content          String
+  views            Int                @default(0)
   metaTitle        String?
   metaDescription  String?
   ogImageUrl       String?
   customHeadScript String?
   customBodyScript String?
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  versions      PortfolioVersion[]
-  customDomains CustomDomain[]
-  visits        PortfolioVisit[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions         PortfolioVersion[]
+  customDomains    CustomDomain[]
+  visits           PortfolioVisit[]
 }
 
 model PortfolioVersion {
   id          String    @id @default(cuid())
   portfolioId String
-  snapshot    Json
+  snapshot    String
   note        String?
   createdAt   DateTime  @default(now())
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -144,8 +144,8 @@ model Plan {
   description   String?
   priceINR      Int // price in paise (Razorpay expects paise)
   currency      String         @default("INR")
-  interval      Interval       @default(MONTHLY) // billing interval
-  features      String[]
+  interval      String         @default("MONTHLY") // billing interval
+  features      String         @default("[]")
   active        Boolean        @default(true)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -154,18 +154,18 @@ model Plan {
 }
 
 model Subscription {
-  id                     String             @id @default(cuid())
+  id                     String    @id @default(cuid())
   userId                 String
   planId                 String
-  status                 SubscriptionStatus @default(ACTIVE)
-  startDate              DateTime           @default(now())
+  status                 String    @default("ACTIVE")
+  startDate              DateTime  @default(now())
   endDate                DateTime?
   razorpaySubscriptionId String?
   razorpayPlanId         String?
-  createdAt              DateTime           @default(now())
-  updatedAt              DateTime           @updatedAt
-  user                   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan                   Plan               @relation(fields: [planId], references: [id], onDelete: Restrict)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                   Plan      @relation(fields: [planId], references: [id], onDelete: Restrict)
   payments               Payment[]
 }
 
@@ -180,7 +180,7 @@ model Payment {
   amount                 Int // in paise
   currency               String        @default("INR")
   method                 String?
-  status                 PaymentStatus @default(PENDING)
+  status                 String        @default("PENDING")
   invoiceNumber          String?       @unique
   refundId               String?
   refundedAt             DateTime?
@@ -224,31 +224,6 @@ model CustomDomain {
   @@index([userId])
 }
 
-enum Interval {
-  MONTHLY
-  YEARLY
-  LIFETIME
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELLED
-  EXPIRED
-  PAST_DUE
-}
-
-enum PaymentStatus {
-  PENDING
-  SUCCESS
-  FAILED
-  REFUNDED
-}
-
-enum Role {
-  ADMIN
-  USER
-}
-
 // ---- Phase 9: Admin Panel ----
 
 model Coupon {
@@ -267,8 +242,8 @@ model SupportTicket {
   id        String          @id @default(cuid())
   userId    String
   subject   String
-  status    TicketStatus    @default(OPEN)
-  priority  TicketPriority  @default(NORMAL)
+  status    String          @default("OPEN")
+  priority  String          @default("NORMAL")
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -286,52 +261,32 @@ model TicketMessage {
 }
 
 model Announcement {
-  id        String           @id @default(cuid())
+  id        String   @id @default(cuid())
   title     String
   content   String
-  type      AnnouncementType @default(INFO)
-  active    Boolean          @default(true)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  type      String   @default("INFO")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model BlogPost {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  content     String
-  excerpt     String?
-  published   Boolean  @default(false)
-  authorId    String
-  coverImage  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  content    String
+  excerpt    String?
+  published  Boolean  @default(false)
+  authorId   String
+  coverImage String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model SiteSetting {
   id        String   @id @default(cuid())
   key       String   @unique
-  value     Json
+  value     String
   updatedAt DateTime @updatedAt
-}
-
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
-  CLOSED
-}
-
-enum TicketPriority {
-  LOW
-  NORMAL
-  HIGH
-  URGENT
-}
-
-enum AnnouncementType {
-  INFO
-  WARNING
-  SUCCESS
 }

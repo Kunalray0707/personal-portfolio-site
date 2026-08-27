@@ -31,7 +31,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       heroSubtitle: portfolio.heroSubtitle,
       isPrivate: portfolio.isPrivate,
       published: false,
-      content: portfolio.content as Prisma.InputJsonValue,
+      content: portfolio.content,
       passwordHash: portfolio.passwordHash
     },
     select: {

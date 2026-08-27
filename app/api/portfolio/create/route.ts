@@ -51,7 +51,13 @@ export async function POST(req: Request) {
       heroSubtitle: data.heroSubtitle || 'Publish your best work with a modern portfolio.',
       isPrivate: data.isPrivate,
       published: false,
-      content: { sections: defaultSections },
+      content: JSON.stringify({
+        sections: [
+          { id: '1', title: 'About Me', type: 'text', body: 'Write something about yourself.' },
+          { id: '2', title: 'My Projects', type: 'feature', bullets: ['Project 1', 'Project 2'] },
+          { id: '3', title: 'Contact', type: 'contact' }
+        ]
+      }),
       passwordHash: null
     },
     select: {

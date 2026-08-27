@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { templates, templateCategories } from '../../lib/templates';
 import { TemplateCard } from '../../components/templates/TemplateCard';
 
@@ -50,8 +52,16 @@ export default function TemplatesPage() {
             <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
               {templates
                 .filter((template) => template.category === category)
-                .map((template) => (
-                  <TemplateCard key={template.slug} template={template} />
+                .map((template, index) => (
+                  <motion.div
+                    key={template.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <TemplateCard template={template} />
+                  </motion.div>
                 ))}
             </div>
           </div>

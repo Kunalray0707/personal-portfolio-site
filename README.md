@@ -19,8 +19,11 @@ Gone are the days of manually tweaking CSS or fighting with complex CMS platform
 - 🏗️ **Intuitive Drag & Drop Builder**: Construct your portfolio visually with customizable text, feature, and contact sections.
 - 📈 **Advanced Analytics Engine**: Track unique visitors, referrals, and device metrics with a privacy-first tracking system.
 - 🔒 **Secure Portfolios**: Lock your portfolio with a password or keep it public for the world to see.
-- 🎨 **Beautiful UI/UX**: Built with modern design principles—vibrant colors, glassmorphism, and smooth micro-animations.
-- 💳 **Integrated Payments**: Fully functional SaaS billing architecture powered by Razorpay.
+- 🎨 **Animated & Glassmorphic UI**: Built with modern design principles—vibrant colors, glassmorphism, and smooth micro-animations powered by `framer-motion` across the entire app.
+- ⚡ **Live Template Previews**: Browse and visually preview fully interactive template designs before using them.
+- 🔑 **Passwordless OTP Authentication**: Seamless email and phone number login without the hassle of passwords.
+- 📡 **Real-time Activity Feeds**: Live chronological feeds showing user registrations, portfolio creations, and updates directly in the Admin and User dashboards.
+- 💳 **Integrated Payments**: Fully functional SaaS billing architecture.
 - 👑 **Admin Dashboard**: Comprehensive management of users, subscriptions, announcements, and customer support tickets.
 - 🌐 **SEO Optimized**: Dynamic `sitemap.xml`, `robots.txt`, and Open Graph image integration out of the box.
 

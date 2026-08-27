@@ -53,7 +53,7 @@ describe('Export lib', () => {
       heroTitle: 'H',
       heroSubtitle: null,
       slug: 't',
-      content: null,
+      content: '{}',
     } as Parameters<typeof toExportPortfolio>[0];
     const out = toExportPortfolio(raw);
     expect(out.description).toBe('');

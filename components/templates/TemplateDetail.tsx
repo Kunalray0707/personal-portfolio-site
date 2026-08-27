@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import type { PortfolioTemplate } from '../../lib/templates';
 
 interface TemplateDetailProps {
@@ -31,7 +32,7 @@ export function TemplateDetail({ template }: TemplateDetailProps) {
       });
 
       if (response.status === 401) {
-        router.push('/auth/login');
+        router.push('/auth');
         return;
       }
 
@@ -50,7 +51,11 @@ export function TemplateDetail({ template }: TemplateDetailProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-8"
+    >
       <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-8 shadow-lg shadow-slate-900/5 dark:border-slate-700/80 dark:bg-slate-950/80">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
           <div className="max-w-2xl">
@@ -74,7 +79,14 @@ export function TemplateDetail({ template }: TemplateDetailProps) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row xl:justify-end">
+          <div className="flex flex-col gap-4 sm:flex-row xl:justify-end mt-6 xl:mt-0">
+            <button
+              type="button"
+              onClick={() => router.push(`/templates/${template.slug}/preview`)}
+              className="inline-flex items-center justify-center rounded-full bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
+            >
+              Live Preview
+            </button>
             <button
               type="button"
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800"
@@ -88,7 +100,7 @@ export function TemplateDetail({ template }: TemplateDetailProps) {
               onClick={() => router.push('/templates')}
               className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-900"
             >
-              View templates
+              Back to Templates
             </button>
           </div>
         </div>
@@ -154,6 +166,6 @@ export function TemplateDetail({ template }: TemplateDetailProps) {
           ))}
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }

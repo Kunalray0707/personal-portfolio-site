@@ -100,7 +100,7 @@ export async function seedPlans(): Promise<void> {
         description: plan.description,
         priceINR: plan.priceINR,
         interval: plan.interval,
-        features: plan.features,
+        features: JSON.stringify(plan.features),
         active: true
       }
     });

@@ -17,12 +17,7 @@ const overviewCards = [
 
 const trafficData = [38, 52, 45, 62, 71, 84, 96];
 const engagementData = [12, 18, 22, 28, 34, 38, 46];
-const recentActivity = [
-  { title: 'New project uploaded', description: 'A new portfolio project sample was added to your showcase.', time: '2 min ago' },
-  { title: 'Lead captured', description: 'A client expressed interest through your contact form.', time: '28 min ago' },
-  { title: 'Template updated', description: 'Your main template was refreshed with new hero styles.', time: '1 hr ago' },
-  { title: 'Password updated', description: 'Security settings were reviewed successfully.', time: '3 hr ago' }
-];
+
 
 const settingsItems = [
   { label: 'Plan', value: 'Pro', detail: 'Unlimited portfolios and premium support' },
@@ -40,11 +35,17 @@ export default function DashboardPage() {
   const [user, setUser] = useState<{ name?: string | null; email?: string | null } | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activity, setActivity] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/auth/me', { cache: 'no-store' })
-      .then((r) => r.json())
-      .then((d) => setUser(d.user))
+    Promise.all([
+      fetch('/api/auth/me', { cache: 'no-store' }).then((r) => r.json()),
+      fetch('/api/dashboard/activity', { cache: 'no-store' }).then((r) => r.json())
+    ])
+      .then(([userData, activityData]) => {
+        setUser(userData.user);
+        setActivity(activityData.activity || []);
+      })
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
@@ -66,18 +67,18 @@ export default function DashboardPage() {
             ))}
           </section>
 
-          <section className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
             <div className="grid gap-6">
               <ChartPanel title="Traffic growth" subtitle="Portfolio visitors" data={trafficData} />
               <ChartPanel title="Engagement" subtitle="CTA interactions" data={engagementData} />
             </div>
             <div className="grid gap-6">
               <ProfileCard name={user?.name} email={user?.email} />
-              <RecentActivity items={recentActivity} />
+              <RecentActivity items={activity.length > 0 ? activity.map(a => ({ title: a.title, description: a.description, time: new Date(a.createdAt).toLocaleString() })) : []} />
             </div>
-          </section>
+          </motion.section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-slate-500 dark:text-slate-400">Portfolio builder</p>
@@ -88,9 +89,9 @@ export default function DashboardPage() {
               </a>
             </div>
             <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Build, publish, and update portfolio content with version history, live preview, and password protection.</p>
-          </section>
+          </motion.section>
 
-          <section className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
             <div id="workspace-settings" className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-sm">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -109,7 +110,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
-            <div id="notifications" className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-sm">
+            <motion.section id="notifications" className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-sm">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Notifications</p>
@@ -128,8 +129,8 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
+            </motion.section>
+          </motion.section>
         </motion.div>
       </div>
     </div>

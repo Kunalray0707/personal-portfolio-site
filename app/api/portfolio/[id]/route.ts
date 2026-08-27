@@ -21,7 +21,7 @@ const updateSchema = z.object({
   isPrivate: z.boolean().default(false),
   published: z.boolean().default(false),
   password: z.string().max(128).optional(),
-  sections: z.array(sectionSchema).min(1),
+  sections: z.array(sectionSchema),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   ogImageUrl: z.string().optional(),
